@@ -11,13 +11,13 @@ const testDbName = `offframe_test_${randomUUID().replaceAll("-", "").slice(0, 16
 const client = new MongoClient(process.env.MONGODB_URI, {
   serverSelectionTimeoutMS: 8000,
 });
-// Match the shipped local configuration: no explicit APP_ORIGIN. This exercises
-// Next's localhost URL normalization for student/admin login and registration.
+// Match the shipped local configuration: no explicit NEXT_PUBLIC_BASE_URL. This
+// exercises Next's localhost URL normalization for student/admin login and registration.
 const env = {
   ...process.env,
   MONGODB_DB: testDbName,
   OFFFRAME_TEST_BUILD: "1",
-  APP_ORIGIN: "",
+  NEXT_PUBLIC_BASE_URL: "",
   NODE_ENV: "development",
   ADMIN_USERNAME: "OFFFRAME",
   ADMIN_PASSWORD: "TestAdminPassword!2026",

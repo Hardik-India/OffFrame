@@ -12,8 +12,9 @@ import {
   Check,
 } from "lucide-react";
 import { BrandHeader, Reels, Footer } from "./brand";
+const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "").replace(/\/$/, "");
 export async function api(path, options = {}) {
-  const response = await fetch(`/api/${path}`, {
+  const response = await fetch(`${BASE_URL}/api/${path}`, {
     ...options,
     headers: {
       ...(options.body && !(options.body instanceof FormData)
