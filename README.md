@@ -18,7 +18,7 @@ npm run dev
 
 Open http://127.0.0.1:3000. The original workspace already has `.env.local` configured with the supplied MongoDB connection and admin credentials. The downloadable source archive intentionally excludes this private file.
 
-Local origin checks use the actual loopback Host header to handle Next.js normalizing `127.0.0.1` to `localhost` internally. This development-only handling still requires the browser origin to match the host, protocol and port, and does not trust forwarded-host headers. Production should set `APP_ORIGIN` to the exact public HTTPS origin.
+Local origin checks use the actual loopback Host header to handle Next.js normalizing `127.0.0.1` to `localhost` internally. This development-only handling still requires the browser origin to match the host, protocol and port, and does not trust forwarded-host headers. Production should set `NEXT_PUBLIC_BASE_URL` to the exact public HTTPS origin. The frontend and backend both read this single value: the browser uses it as the API base URL, and the server uses it for origin/CORS checks and secure cookies.
 
 The origin fix is shared by **student login, student registration, email eligibility, and admin login**. When replacing an older copy with this archive, stop that copy's server, extract the new source, retain your private `.env.local`, then run `npm ci --include=dev` and `npm run dev` from the new `OffFrame` directory. Refresh the browser afterward. An older server left running on port 3000 will continue serving its old code even if a new ZIP has been downloaded.
 
@@ -54,7 +54,7 @@ The provided requirements define email verification as a match against the pre-r
 | `SESSION_SECRET` | At least 32 random characters for signing sessions. |
 | `ADMIN_USERNAME` | Defaults to `OFFFRAME`. |
 | `ADMIN_PASSWORD` | Required server-side admin password. |
-| `APP_ORIGIN` | Public HTTPS origin, e.g. `https://offframe.example.com`. Set for deployment; no trailing slash. |
+| `NEXT_PUBLIC_BASE_URL` | Public HTTPS origin, e.g. `https://offframe.example.com`. Set for deployment; no trailing slash. Shared by both the browser (API base URL) and the server (origin checks, secure cookies). |
 | `SUBMISSION_OPENS_AT` | Optional fallback ISO timestamp with timezone offset, used before admin settings are saved. |
 | `SUBMISSION_CLOSES_AT` | Optional fallback closing timestamp. |
 | `EVENT_TIMEZONE` | Display zone, defaults to `Asia/Kolkata`. Admin schedule entry uses IST. |
@@ -90,7 +90,7 @@ docker build -t offframe .
 docker run --env-file .env.production -p 3000:3000 offframe
 ```
 
-Create `.env.production` with the same private keys and the actual HTTPS `APP_ORIGIN`. The Docker image contains no `.env` files. Put an HTTPS reverse proxy in front of the container; allow a 12 MB request body and enough request time for PNG processing. Configure Atlas network access for the deployment server's outbound IP. The Node process needs at least 512 MB RAM; image conversion runs on the server. The application stores images in MongoDB, so no persistent local upload volume is required.
+Create `.env.production` with the same private keys and the actual HTTPS `NEXT_PUBLIC_BASE_URL`. The Docker image contains no `.env` files. Put an HTTPS reverse proxy in front of the container; allow a 12 MB request body and enough request time for PNG processing. Configure Atlas network access for the deployment server's outbound IP. The Node process needs at least 512 MB RAM; image conversion runs on the server. The application stores images in MongoDB, so no persistent local upload volume is required.
 
 The local implementation is configured and tested. Publishing requires a compatible hosting destination and its deployment access.
 
