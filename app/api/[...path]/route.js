@@ -496,7 +496,7 @@ async function handle(request, context) {
     return NextResponse.json(
       {
         error:
-          "The service is temporarily unavailable. Please try again shortly.",
+          "This service is temporarily unavailable. Please try again shortly...",
       },
       { status: 503 },
     );
